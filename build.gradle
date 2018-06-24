@@ -1,0 +1,34 @@
+apply plugin: 'java'
+apply plugin: 'application'
+mainClassName = "com.github.muriloaj.vkheimdall.Application"
+
+group = 'com.github.muriloaj'
+version = '0.0.0-SNAPSHOT'
+
+description = "Basic reference project - mysql up 2 now"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.8.1'
+}
+
+
+dependencies {
+    compile 'com.sparkjava:spark-core:2.7.2' // spark framework - http://sparkjava.com/documentation
+    compile 'org.slf4j:slf4j-simple:1.7.25' // troubleshooting for log
+
+    compile 'com.google.code.gson:gson:2.8.5' //Json
+
+    testCompile 'junit:junit:4.12'
+}
