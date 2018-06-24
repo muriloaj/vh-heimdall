@@ -13,8 +13,6 @@ public class Application {
 
         path("token", () -> {
 
-                    get(EndpointURI.ROOT.getValue(), (req, res) -> EndpointURI.values(), json());
-
                     post(EndpointURI.ISSUE.getValue(), (req, res) -> TokenController.issue(req, res), json());
 
                     post(EndpointURI.VALIDATE.getValue(), (req, res) -> TokenController.validate(req, res), json());
