@@ -3,52 +3,69 @@ package com.github.muriloaj.vkheimdall.controller;
 import com.github.muriloaj.vkheimdall.model.Token;
 import spark.Request;
 import spark.Response;
-import spark.Route;
 
 import java.util.UUID;
 
 import static com.github.muriloaj.vkheimdall.commons.JsonUtils.fromJson;
-import static com.github.muriloaj.vkheimdall.commons.JsonUtils.toJson;
+import static com.github.muriloaj.vkheimdall.service.RedisConnector.useJedis;
+import static spark.utils.StringUtils.isNotEmpty;
 
 
 public class TokenController {
 
-    public static Route issue = (Request req, Response resp) -> {
-        try {
+    public static Token issue(Request req, Response res) {
 
-            String reference = req.params("reference");
-            return new Token(UUID.randomUUID().toString(), reference, true);
+        try {
+            String reference = req.params("ref");
+            System.out.println("--".concat(reference));
+            String uuid = UUID.randomUUID().toString();
+            useJedis().set(uuid, reference);
+            System.out.println(uuid);
+            return new Token(uuid, reference, true);
 
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.println(e.getMessage());
-            resp.status(501);
-            return toJson(e.getMessage());
+            res.status(501);
+
+            return null;
         }
 
-    };
+    }
 
-    public static Route validate = (Request req, Response resp) -> {
+    public static Token validate(Request req, Response res) {
         try {
 
             Token token = (Token) fromJson(req.body(), Token.class);
-            token.setValidated(true);
-            return token;
+            String reference = useJedis().get(token.getToken());
+            return new Token(token.getToken(), reference, isNotEmpty(reference));
+
 
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.println(e.getMessage());
-            return toJson(e.getMessage());
+            res.status(501);
+
+            return null;
         }
-    };
-
-    public static Route revoke = (Request req, Response resp) -> { try {
-
-        String token = req.params("token");
-        return new Token(token, "", false);
-
-    } catch (Exception e) {
-        System.err.println(e.getMessage());
-        resp.status(501);
-        return toJson(e.getMessage());
     }
-    };
+
+    public static Token revogate(Request req, Response res) {
+        try {
+
+            Token token = (Token) fromJson(req.body(), Token.class);
+            useJedis().del(token.getToken());
+
+            return validate(req, res);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getMessage());
+            res.status(501);
+
+            return null;
+        }
+    }
 }
+

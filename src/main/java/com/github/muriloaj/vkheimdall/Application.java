@@ -11,13 +11,18 @@ public class Application {
 
         configAPI();
 
-        get(EndpointURI.ROOT.getValue(), (req, res) -> EndpointURI.stream() , json());
+        path("token", () -> {
 
-        post(EndpointURI.ISSUE.getValue(), (req, res) -> TokenController.issue);
+                    get(EndpointURI.ROOT.getValue(), (req, res) -> EndpointURI.values(), json());
 
-        post(EndpointURI.VALIDATE.getValue(), (req, res) -> TokenController.validate);
+                    post(EndpointURI.ISSUE.getValue(), (req, res) -> TokenController.issue(req, res), json());
 
-        get(EndpointURI.REVOGATE.getValue(), (req, res) -> TokenController.revoke);
+                    post(EndpointURI.VALIDATE.getValue(), (req, res) -> TokenController.validate(req, res), json());
+
+                    post(EndpointURI.REVOGATE.getValue(), (req, res) -> TokenController.revogate(req, res), json());
+                }
+        );
+
 
     }
 

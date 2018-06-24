@@ -17,6 +17,10 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
+    maven {
+        url "https://dl.bintray.com/spark-packages/maven/"
+    }
+
 }
 
 task wrapper(type: Wrapper) {
@@ -29,6 +33,8 @@ dependencies {
     compile 'org.slf4j:slf4j-simple:1.7.25' // troubleshooting for log
 
     compile 'com.google.code.gson:gson:2.8.5' //Json
+
+    compile 'redis.clients:jedis:2.9.0' //Redis
 
     testCompile 'junit:junit:4.12'
 }

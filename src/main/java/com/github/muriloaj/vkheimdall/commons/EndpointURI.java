@@ -1,13 +1,13 @@
 package com.github.muriloaj.vkheimdall.commons;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
 public enum EndpointURI {
+
     ROOT("/"),
-    ISSUE("/issue/:reference"),
+    ISSUE("/issue/:ref"),
     VALIDATE("/validate"),
-    REVOGATE("/revogate/:token");
+    REVOGATE("/revogate");
 
     private String uri;
 

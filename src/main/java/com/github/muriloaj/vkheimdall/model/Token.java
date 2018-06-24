@@ -40,7 +40,7 @@ public class Token {
         this.token = token;
     }
 
-    public String getReferencen() {
+    public String getReference() {
         return this.reference;
     }
 
